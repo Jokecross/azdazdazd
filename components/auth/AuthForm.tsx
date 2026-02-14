@@ -26,9 +26,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setLoading(true)
     setError(null)
 
+    console.log('🔐 Tentative de connexion...', { mode, email: formData.email })
+
     try {
       if (mode === 'signup') {
-        const { error: signUpError } = await supabase.auth.signUp({
+        const { data, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
@@ -37,18 +39,43 @@ export default function AuthForm({ mode }: AuthFormProps) {
             },
           },
         })
+        
+        console.log('📝 Résultat inscription:', { data, error: signUpError })
+        
         if (signUpError) throw signUpError
+        
+        // Vérifier si l'email doit être confirmé
+        if (data?.user && !data.session) {
+          setError('Vérifiez votre email pour confirmer votre compte.')
+          return
+        }
+        
         router.push('/dashboard')
+        router.refresh()
       } else {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
           email: formData.email,
           password: formData.password,
         })
-        if (signInError) throw signInError
+        
+        console.log('🔑 Résultat connexion:', { data, error: signInError })
+        
+        if (signInError) {
+          console.error('❌ Erreur de connexion:', signInError)
+          throw signInError
+        }
+        
+        if (!data.session) {
+          throw new Error('Aucune session créée')
+        }
+        
+        console.log('✅ Connexion réussie ! Redirection...')
         router.push('/dashboard')
+        router.refresh()
       }
     } catch (err: any) {
-      setError(err.message || 'Une erreur est survenue')
+      console.error('❌ Erreur auth:', err)
+      setError(err.message || 'Une erreur est survenue lors de la connexion')
     } finally {
       setLoading(false)
     }
