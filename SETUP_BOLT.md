@@ -84,11 +84,19 @@ create trigger on_auth_user_created
 
 ### Étape 2 : Configuration dans Bolt.new (30 sec)
 
-#### 2.1 Ouvrir le fichier .env.local
+#### 2.1 Créer le fichier .env.local
 
-Dans Bolt.new, dans l'explorateur de fichiers à gauche, clique sur `.env.local`
+Dans le terminal Bolt.new, tape :
 
-#### 2.2 Remplacer les valeurs
+```bash
+cp .env.example .env.local
+```
+
+#### 2.2 Ouvrir et modifier .env.local
+
+Dans l'explorateur de fichiers à gauche, clique sur `.env.local`
+
+#### 2.3 Remplacer les valeurs
 
 Remplace les placeholders par tes vraies valeurs :
 
@@ -105,7 +113,7 @@ NEXT_PUBLIC_SITE_URL=https://ton-projet.bolt.new
 - Copie l'URL complète (exemple : `https://stackblitz-starters-abc123.local.run`)
 - Colle-la comme valeur de `NEXT_PUBLIC_SITE_URL`
 
-#### 2.3 Sauvegarder
+#### 2.4 Sauvegarder
 
 Ctrl/Cmd + S pour sauvegarder le fichier.
 

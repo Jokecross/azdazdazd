@@ -30,7 +30,15 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
    - Copiez-collez le code du fichier `SUPABASE_SETUP.md` section 3.1
    - Cliquez sur "Run"
 
-### 3️⃣ Lancement (30 sec)
+### 3️⃣ Créer le fichier .env.local (10 sec)
+
+```bash
+cp .env.example .env.local
+```
+
+Puis édite `.env.local` et colle tes clés Supabase.
+
+### 4️⃣ Lancement (30 sec)
 
 ```bash
 npm run dev
