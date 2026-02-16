@@ -58,8 +58,15 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
+  console.log('🔒 Middleware -', {
+    path: request.nextUrl.pathname,
+    hasSession: !!session,
+    userEmail: session?.user?.email || 'none'
+  })
+
   // Si l'utilisateur n'est pas connecté et tente d'accéder au dashboard
   if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
+    console.log('❌ Pas de session - Redirection vers /login')
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/login'
     return NextResponse.redirect(redirectUrl)
@@ -67,11 +74,13 @@ export async function middleware(request: NextRequest) {
 
   // Si l'utilisateur est connecté et tente d'accéder aux pages d'auth
   if (session && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup')) {
+    console.log('✅ Session active - Redirection vers /dashboard')
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/dashboard'
     return NextResponse.redirect(redirectUrl)
   }
 
+  console.log('➡️ Laisse passer')
   return response
 }
 
