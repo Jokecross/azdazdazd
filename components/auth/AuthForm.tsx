@@ -76,13 +76,16 @@ export default function AuthForm({ mode }: AuthFormProps) {
         }
         
         console.log('✅ Connexion réussie !', { user: data.user.email, session: !!data.session })
-        console.log('🔄 Redirection vers dashboard...')
+        console.log('🍪 Cookies:', document.cookie)
+        console.log('🔄 Redirection vers dashboard dans 500ms...')
         
-        // Attendre un petit délai pour que les cookies soient bien enregistrés
-        await new Promise(resolve => setTimeout(resolve, 100))
+        // Attendre 500ms pour être SÛR que les cookies sont propagés
+        await new Promise(resolve => setTimeout(resolve, 500))
         
-        // Force la redirection complète pour recharger le middleware
-        window.location.href = '/dashboard'
+        console.log('🍪 Cookies après délai:', document.cookie)
+        
+        // Force un rechargement COMPLET de la page
+        window.location.replace('/dashboard')
       }
     } catch (err: any) {
       console.error('❌ Erreur auth:', err)
